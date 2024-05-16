@@ -260,7 +260,7 @@ def buildCnn(max_len, top_words, dim, seed, embedding_matrix, optimizer, n_categ
 
 # Define specific seeder for all experiments and processes
 
-seeders = [123456, 789012, 345678, 901234, 567890, 123, 456, 789, 123, 456]
+seeders = [123456, 789012, 345678, 901234, 567890, 123, 456, 789, 135, 680]
 
 for seed in seeders:
 

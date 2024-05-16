@@ -57,7 +57,7 @@ from imblearn.under_sampling import RandomUnderSampler
 from collections import defaultdict
 from sklearn.utils import shuffle
 
-seeders = [123456, 789012, 345678, 901234, 567890, 123, 456, 789, 123, 456]
+seeders = [123456, 789012, 345678, 901234, 567890, 123, 456, 789, 135, 680]
 
 seed = seeders[0]
 

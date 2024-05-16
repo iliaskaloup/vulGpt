@@ -78,10 +78,10 @@ def getMaxLen(X):
 
 # Specify a constant seeder for processes
 
-seeders = [123456, 789012, 345678, 901234, 567890, 123, 456, 789, 123, 456]
+seeders = [123456, 789012, 345678, 901234, 567890, 123, 456, 789, 135, 680]
 
 for seed in seeders:
-
+    print(seed)
     np.random.seed(seed)
     random.seed(seed)
     torch.manual_seed(seed)
