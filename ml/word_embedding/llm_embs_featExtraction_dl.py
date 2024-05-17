@@ -730,4 +730,8 @@ for seed in seeders:
         writer.writerow(average_metrics)
 
 
+    # Clean up
+    del myModel
+    #tf.keras.backend.clear_session()
+
 

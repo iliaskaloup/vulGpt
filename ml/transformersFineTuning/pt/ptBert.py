@@ -617,6 +617,9 @@ for seed in seeders:
         writer.writeheader()
         writer.writerow(average_metrics)
 
+    # Clean up
+    del model
+    torch.cuda.empty_cache()
 
 
 
