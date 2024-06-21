@@ -57,6 +57,10 @@ from imblearn.under_sampling import RandomUnderSampler
 from collections import defaultdict
 from sklearn.utils import shuffle
 
+
+gpus = tf.config.experimental.list_physical_devices('GPU')
+tf.config.experimental.set_memory_growth(gpus[0], True)
+
 seeders = [123456, 789012, 345678, 901234, 567890, 123, 456, 789, 135, 680]
 
 seed = seeders[0]
@@ -68,7 +72,7 @@ tf.random.set_seed(seed)
 method = "w2v"
 
 root_path = os.path.join('..', '..', '..')
-dataset = pd.read_csv(os.path.join(root_path, 'data', 'train.csv'))
+dataset = pd.read_csv(os.path.join(root_path, 'data', 'dataset.csv'))
 
 
 data = dataset.sample(frac=1, random_state=seed).reset_index(drop=True)
@@ -76,20 +80,16 @@ print(data.head())
 print(len(data))
 
 
-data = data[data["project"] != "Chrome"]
-print(len(data))
-
-
-data = data[["processed_func", "target"]]
+data = data[["func", "vul"]]
 data.head()
 
-data = data.dropna(subset=["processed_func"])
+data = data.dropna(subset=["func"])
 
-word_counts = data["processed_func"].apply(lambda x: len(x.split()))
+word_counts = data["func"].apply(lambda x: len(x.split()))
 max_length = word_counts.max()
 print("Maximum number of words:", max_length)
 
-vc = data["target"].value_counts()
+vc = data["vul"].value_counts()
 
 print(vc)
 
@@ -98,23 +98,15 @@ print("Percentage: ", (vc[1] / vc[0])*100, '%')
 n_categories = len(vc)
 print(n_categories)
 
-train_data = pd.DataFrame(({'Text': data['processed_func'], 'Labels': data['target']}))
-train_data.head()
+data = pd.DataFrame(({'Text': data['func'], 'Labels': data['vul']}))
+data.head()
 
-val_data = pd.read_csv(os.path.join(root_path, 'data', 'val.csv'))
+val_ratio = 0.10
 
-val_data = val_data[val_data["project"] != "Chrome"]
+train_data, test_data = train_test_split(data, test_size=val_ratio, random_state=seed, stratify=data['Labels'])
+train_data, val_data = train_test_split(train_data, test_size=val_ratio, random_state=seed, stratify=train_data['Labels'])
 
-val_data = pd.DataFrame(({'Text': val_data['processed_func'], 'Labels': val_data['target']}))
-val_data.head()
-
-test_data = pd.read_csv(os.path.join(root_path, 'data', 'test.csv'))
-
-test_data = test_data[test_data["project"] != "Chrome"]
-
-test_data = pd.DataFrame(({'Text': test_data['processed_func'], 'Labels': test_data['target']}))
-
-sampling = False
+sampling = True
 if n_categories == 2 and sampling == True:
     # Apply under-sampling with the specified strategy
     class_counts = pd.Series(train_data["Labels"]).value_counts()
@@ -126,7 +118,7 @@ if n_categories == 2 and sampling == True:
     minority_class = class_counts.idxmin()
     print("Minority class ", minority_class)
 
-    target_count = 4 * class_counts[class_counts.idxmin()] # int(class_counts[class_counts.idxmax()] / 2) # 2 * class_counts[class_counts.idxmin()] # class_counts[class_counts.idxmin()] # int(class_counts.iloc[0] / 2)  
+    target_count = 2 * class_counts[class_counts.idxmin()] # int(class_counts[class_counts.idxmax()] / 2) # 2 * class_counts[class_counts.idxmin()] # class_counts[class_counts.idxmin()] # int(class_counts.iloc[0] / 2)
     print("Targeted number of majority class", target_count)
 
     # under
@@ -392,7 +384,7 @@ def buildCnn(max_len, top_words, dim, seed, embedding_matrix, optimizer, n_categ
 print("Training...")
 milli_sec1 = int(round(time.time() * 1000))
 
-userModel = "cnn"
+userModel = "bigru"
 
 if userModel == "cnn":
     myModel = buildCnn(max_len, num_words, dim, seed, embedding_matrix, optimizer, n_categories) 

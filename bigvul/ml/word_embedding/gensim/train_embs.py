@@ -10,8 +10,6 @@ import nltk
 
 seed = 123456
 
-
-
 # hyperparams
 dim = 100
 method = "w2v" # ft
@@ -22,9 +20,17 @@ epochs = 10
 # read embddings corpus corpus_embeddings
 root_path = os.path.join('..', '..', '..')
 
-dataset = pd.read_csv(os.path.join(root_path, 'data', 'train.csv'))
+dataset = pd.read_csv(os.path.join(root_path, 'data', 'dataset.csv'))
 
-data = dataset.sample(frac=1, random_state=seed).reset_index(drop=True)
+# data split
+val_ratio = 0.1
+num_of_ratio = int(val_ratio * len(dataset))
+data = dataset.iloc[0:-num_of_ratio, :]
+test_data = dataset.iloc[-num_of_ratio:, :]
+train_data = data.iloc[0:-num_of_ratio, :]
+val_data = data.iloc[-num_of_ratio:, :]
+
+data = train_data.sample(frac=1, random_state=seed).reset_index(drop=True)
 print(data.head())
 print(len(data))
 
