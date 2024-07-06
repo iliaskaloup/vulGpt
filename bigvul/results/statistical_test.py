@@ -9,11 +9,13 @@ import pandas as pd
 from scipy.stats import wilcoxon
 import statistics
 
-relative_path1 = os.path.join("w2v_cnn", "staticEmbedding" )
+relative_path1 = os.path.join("CodeGPT-small-py-adaptedGPT2", "embeddingsExtraction", "bigru")
 
-relative_path2 = os.path.join("codebert-base", "embeddingsExtraction" )
+#relative_path1 = os.path.join("CodeGPT-small-py", "forSequence")
 
-var_of_interset = "f1"
+relative_path2 = os.path.join("CodeGPT-small-py", "embeddingsExtraction", "bigru")
+
+var_of_interest = "f1"
 
 all_data1 = pd.DataFrame()
 
@@ -29,11 +31,11 @@ for root, dirs, files in os.walk(relative_path1):
                 df = pd.read_csv(file_path)
                 # Append the dataframe to the master dataframe
                 all_data1 = pd.concat([all_data1, df], ignore_index=True)
-all_data1
 
 
+print(all_data1[var_of_interest])
 print(all_data1.describe())
-#print("avg   ", round(sum(all_data1[var_of_interset].values.tolist())/len(all_data1[var_of_interset].values.tolist()), 6))
+#print("avg   ", round(sum(all_data1[var_of_interest].values.tolist())/len(all_data1[var_of_interest].values.tolist()), 6))
 
 
 all_data2 = pd.DataFrame()
@@ -50,11 +52,20 @@ for root, dirs, files in os.walk(relative_path2):
                 df = pd.read_csv(file_path)
                 # Append the dataframe to the master dataframe
                 all_data2 = pd.concat([all_data2, df], ignore_index=True)
-all_data2
 
 
+print(all_data2[var_of_interest])
 print(all_data2.describe())
 
 # conduct the Wilcoxon-Signed Rank Test: pvalue < 0.05 --> statistically significant differentiation of the results
-wilcoxon(all_data1[var_of_interset].values.tolist(), all_data2[var_of_interset].values.tolist())
+res = wilcoxon(all_data1[var_of_interest].values.tolist(), all_data2[var_of_interest].values.tolist())
+print(res)
+coef = res[0]
+print("statistic coefficient: ", coef)
+pvalue = res[1]
+print("p value: ", pvalue)
 
+if pvalue < 0.05:
+    print("statistically significant differentiation")
+else:
+    print("no statistical significance")

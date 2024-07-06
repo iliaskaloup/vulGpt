@@ -31,42 +31,44 @@ from imblearn.under_sampling import RandomUnderSampler
 from sklearn.utils import shuffle
 
 
-seeders = [123456, 789012, 345678, 901234, 567890, 123, 456, 789, 123, 456]
+root_path = os.path.join('..', '..')
+dataset = pd.read_csv(os.path.join(root_path, 'data', 'dataset.csv'))
 
+seeders = [123456, 789012, 345678, 901234, 567890, 123, 456, 789, 135, 680]
 seed = seeders[0]
-
 np.random.seed(seed)
 random.seed(seed)
 
+# data split
+val_ratio = 0.1
+num_of_ratio = int(val_ratio * len(dataset))
+data = dataset.iloc[0:-num_of_ratio, :]
+test_data = dataset.iloc[-num_of_ratio:, :]
+train_data = data.iloc[0:-num_of_ratio, :]
+val_data = data.iloc[-num_of_ratio:, :]
 
-root_path = os.path.join('..', '..')
-
-
-dataset = pd.read_csv(os.path.join(root_path, 'data', 'train.csv'))
-
-
-data = dataset.sample(frac=1, random_state=seed).reset_index(drop=True)
-print(data.head())
-print(len(data))
-
-
-data = data[data["project"] != "Chrome"]
-print(len(data))
+train_data = train_data.sample(frac=1, random_state=seed).reset_index(drop=True)
+print(train_data.head())
+print(len(train_data))
 
 
-data = data[["processed_func", "target"]]
-data.head()
+train_data = train_data[train_data["project"] != "Chrome"]
+print(len(train_data))
 
 
-data = data.dropna(subset=["processed_func"])
+train_data = train_data[["processed_func", "target"]]
+train_data.head()
 
 
-word_counts = data["processed_func"].apply(lambda x: len(x.split()))
+train_data = train_data.dropna(subset=["processed_func"])
+
+
+word_counts = train_data["processed_func"].apply(lambda x: len(x.split()))
 max_length = word_counts.max()
 print("Maximum number of words:", max_length)
 
 
-vc = data["target"].value_counts()
+vc = train_data["target"].value_counts()
 
 print(vc)
 
@@ -76,20 +78,16 @@ n_categories = len(vc)
 print(n_categories)
 
 
-train_data = pd.DataFrame(({'text': data['processed_func'], 'label': data['target']}))
+train_data = pd.DataFrame(({'text': train_data['processed_func'], 'label': train_data['target']}))
 #train_data = train_data[0:100]
 train_data.head()
 
-
-val_data = pd.read_csv(os.path.join(root_path, 'data', 'val.csv'))
 
 val_data = val_data[val_data["project"] != "Chrome"]
 
 val_data = pd.DataFrame(({'text': val_data['processed_func'], 'label': val_data['target']}))
 val_data.head()
 
-
-test_data = pd.read_csv(os.path.join(root_path, 'data', 'test.csv'))
 
 test_data = test_data[test_data["project"] != "Chrome"]
 
@@ -180,17 +178,20 @@ f1 = f1_score(y_true=y_val, y_pred=val_preds)
 precision = precision_score(y_true=y_val, y_pred=val_preds)
 recall = recall_score(y_true=y_val, y_pred=val_preds)
 f2 = 5*precision*recall / (4*precision+recall)
+print("Evaluation Results on validation data")
 print(f"F1 Score: {f1}")
 print(f"Precision: {precision}")
 print(f"Recall: {recall}")
 print(f"F2 Score: {f2}")
 
+print("\n")
 
 # evaluate on test data
 f1 = f1_score(y_true=y_test, y_pred=preds)
 precision = precision_score(y_true=y_test, y_pred=preds)
 recall = recall_score(y_true=y_test, y_pred=preds)
 f2 = 5*precision*recall / (4*precision+recall)
+print("Evaluation Results on test data")
 print(f"F1 Score: {f1}")
 print(f"Precision: {precision}")
 print(f"Recall: {recall}")
