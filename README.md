@@ -17,6 +17,7 @@ Inside the vulGpt-main folder, there are two yaml files:
 • tfenv.yml file, which is the python-conda virtual environment (venv) for the experiments that utilized the Tensorflow framework (all the other scripts)
 
 There are also three folders:
+
 • bigvul for the experiments on the Big-Vul dataset 
 
 • devign for the experiment on the Devign dataset
@@ -25,12 +26,12 @@ There are also three folders:
 
 Each of these three folders contain four sub-folders:
 
-• data_mining: Contains the data_mining.py file that transforms the dataset in the format that is utilized by the ML pipelines in the ml folder. The produced files are stored in the folder data.
+• data_mining: Contains the data_mining.py file that transforms the dataset in the format that is utilized by the ML pipelines in the ml folder. The produced files are stored in the folder "data".
 
-• data: The folder that has the raw data and the files produced by the data_mining.py
+• data: The folder that has the raw data and the files produced by the data_mining.py.
 	In the case of Big-Vul, there is no data folder initially, as the dataset is downloaded during the execution of the data_mining.py.
 
-• ml: The folder with the ML pipelines that actually perform the experiments of the analysis.
+• ml: The folder with the ML pipelines that actually perform the experiments of the analysis. It contains:
 
 	• The transformersFineTuning/pt/ptBert.py performs the fine-tuning of CodeBERT (choose CodeBERT variant e.g. model_variation = "microsoft/codebert-base-mlm" (e.g., for bigvul in line 90))
 	
@@ -47,7 +48,8 @@ Each of these three folders contain four sub-folders:
 	• The bag_of_words/bow.py performs the Bag of Words experiment
 
 • results: It is the folder where the results are stored after the successful completion of the experiments. It also contains the statistical_test.py that performs the Wilcoxon signed-rank statistical test to identify statistical significance between the results specified in the beginning of the file, e.g.
-	• relative_path2 = os.path.join("codebert-base-mlm", "embeddingsExtraction", "bigru")
+
+	• relative_path1 = os.path.join("codebert-base-mlm", "embeddingsExtraction", "bigru")
 	
 	• relative_path2 = os.path.join("codebert-base", "embeddingsExtraction", "bigru")
 	
