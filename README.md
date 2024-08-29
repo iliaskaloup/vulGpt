@@ -1,6 +1,12 @@
 # vulGpt
 Replication package developed during the conduction of our publication on which we examined Transformer-based pre-trained models and we investigated the best practices for their utilization for the downstream task of Vulnerability Prediction in software systems.
 
+## Overview of the overall methodology
+THe high-level overview of the overall methodology that we followed in our study is illustrated in the figure belowe:
+
+![alt text](https://github.com/iliaskaloup/vulGpt/blob/main/methodology.png?raw=true)
+
+
 ### Replication Package of our research work entitled "Transfer Learning for Software Vulnerability Prediction using Transformer Models"
 
 To replicate the analysis and reproduce the results:
