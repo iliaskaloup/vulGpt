@@ -197,7 +197,7 @@ else:
 # In[13]:
 
 
-model = GPT2ForSequenceClassification.from_pretrained(model_variation, num_labels=n_categories)
+model = GPT2ForSequenceClassification.from_pretrained(model_variation, pad_token_id=tokenizer.pad_token_id, eos_token_id=tokenizer.eos_token_id, num_labels=n_categories)
 
 
 # Resize model embedding to match new tokenizer
