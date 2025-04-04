@@ -90,5 +90,5 @@ Chakraborty, S., Krishna, R., Ding, Y., & Ray, B. (2021). Deep learning based vu
 ### Citation
 To cite this paper:
 ~~~
-I. Kalouptsoglou, M. Siavvas, A. Ampatzoglou, D. Kehagias, A. Chatzigeorgiou, Transfer Learning for Software Vulnerability Prediction using Transformer Models, in: Journal of Systems and Software (JSS), Elsevier, 2024
+I. Kalouptsoglou, M. Siavvas, A. Ampatzoglou, D. Kehagias, A. Chatzigeorgiou, Transfer Learning for Software Vulnerability Prediction using Transformer Models, in: Journal of Systems and Software (JSS), Elsevier, 2025
 ~~~
